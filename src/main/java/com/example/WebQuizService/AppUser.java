@@ -38,6 +38,9 @@ public class AppUser {
     @OneToMany(mappedBy = "author")
     private List<Quiz> quiz;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<Completion> completions;
+
     public AppUser() {
     }
 
@@ -76,5 +79,13 @@ public class AppUser {
 
     public void setQuiz(List<Quiz> quiz) {
         this.quiz = quiz;
+    }
+
+    public List<Completion> getCompletions() {
+        return completions;
+    }
+
+    public void setCompletions(List<Completion> completions) {
+        this.completions = completions;
     }
 }
