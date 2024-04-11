@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,7 +35,7 @@ public class QuizController {
     private AppUserRepository appUserRepository;
 
     @Autowired
-    private completionRepository completionRepository;
+    private CompletionRepository completionRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -203,6 +204,11 @@ public class QuizController {
         Optional<AppUser> optionalAppUser = appUserRepository.findAppUserByUsername(details.getUsername());
         if (optionalAppUser.isPresent()) {
             AppUser user = optionalAppUser.get();
+            Page<Completion> sortedCompletions = completionRepository.findCompletionsByUser(user, PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "completedAt")));
+
+            return ResponseEntity
+                    .ok()
+                    .body(sortedCompletions);
 
         } else {
             return ResponseEntity
