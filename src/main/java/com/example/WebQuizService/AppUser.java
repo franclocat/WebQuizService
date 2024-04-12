@@ -2,16 +2,17 @@ package com.example.WebQuizService;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.annotation.Nullable;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+
+import jakarta.validation.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 //Creates a user as an object of a class
@@ -37,9 +38,6 @@ public class AppUser {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "author")
     private List<Quiz> quiz;
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private List<Completion> completions;
 
     public AppUser() {
     }
@@ -79,13 +77,5 @@ public class AppUser {
 
     public void setQuiz(List<Quiz> quiz) {
         this.quiz = quiz;
-    }
-
-    public List<Completion> getCompletions() {
-        return completions;
-    }
-
-    public void setCompletions(List<Completion> completions) {
-        this.completions = completions;
     }
 }
