@@ -1,43 +1,44 @@
 package com.example.WebQuizService;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Length;
 
-import jakarta.validation.*;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import java.util.ArrayList;
 import java.util.List;
 
 //Creates a user as an object of a class
 
 @Entity
-@Table(name = "User")
+@Table(name = "AppUser")
 public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "email")
-    @NotBlank
-    @Pattern(regexp = "\\w*@\\w*\\.\\w")//regex patter that checks for a valid email address
+    @Column(name = "EMAIL")
+    @NotBlank(message = "")
+    @Pattern(regexp = "\\w+@\\w+\\.\\w+", message = "The format has to be as follows: example@example.com")//regex patter that checks for a valid email address
     private String email;
 
-    @Column(name = "password")
-    @NotBlank
-    @Min(value = 5)
+    @Column(name = "PASSWORD")
+    @NotBlank(message = "Please input your wanted password")
+    @Length(min = 5, message = "The password has to be at least 5 characters long")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "author")
     private List<Quiz> quiz;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "author")
+    private List<Completion> completions;
 
     public AppUser() {
     }
@@ -77,5 +78,13 @@ public class AppUser {
 
     public void setQuiz(List<Quiz> quiz) {
         this.quiz = quiz;
+    }
+
+    public List<Completion> getCompletions() {
+        return completions;
+    }
+
+    public void setCompletions(List<Completion> completions) {
+        this.completions = completions;
     }
 }
