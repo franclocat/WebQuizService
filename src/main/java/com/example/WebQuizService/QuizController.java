@@ -217,6 +217,7 @@ public class QuizController {
             //create a page of 10 elements of completion from the current user and sort them in descending order of the completion time
             Page<Completion> sortedCompletions = completionRepository.findCompletionsByAuthor(currentUser, PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "completedAt")));
 
+            //return the paged completions depending on the given page parameter
             return ResponseEntity
                     .ok()
                     .body(sortedCompletions);
